@@ -1,0 +1,220 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kelvin Symphony Orchestra{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kelvin': '#008888',
+                        'kelvin-dark': '#006666',
+                        'kelvin-light': '#00aaaa',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .navbar-gradient {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div id="navbarContent" class="flex justify-between items-center transition-all duration-300 py-6">
+                <!-- Logo -->
+                <a href="" class="flex items-center gap-3 text-white hover:opacity-80 transition-opacity">
+                    <img src="{% static 'img/header/logo.png' %}"
+                         alt="Kelvin Symphony Orchestra"
+                         id="navbarLogo"
+                         class="h-24 w-auto">
+                </a>
+{#                <a href="" class="flex items-center gap-3 text-white hover:opacity-80 transition-opacity">#}
+{#                    <div class="w-12 h-12 bg-kelvin rounded-full flex items-center justify-center text-xl font-bold">#}
+{#                        K#}
+{#                    </div>#}
+{#                    <div>#}
+{#                        <h1 class="text-xl font-semibold">Kelvin Symphony</h1>#}
+{#                        <p class="text-sm text-gray-300">Orchestra</p>#}
+{#                    </div>#}
+{#                </a>#}
+
+                <!-- Desktop Menu -->
+                <ul class="hidden lg:flex items-center gap-8">
+                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Home</a></li>
+                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">About Us</a></li>
+                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Concerts</a></li>
+                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Contact</a></li>
+                    <li>
+                        <a href="" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark hover:shadow-lg hover:-translate-y-0.5 transition-all inline-block">
+                            Buy Tickets
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Mobile Toggle -->
+                <button id="mobileToggle" class="lg:hidden text-white text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="lg:hidden fixed top-0 right-0 h-screen w-80 bg-gray-900 transform translate-x-full transition-transform duration-300 shadow-2xl">
+            <div class="flex flex-col p-8 pt-20 gap-6">
+                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Home</a>
+                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">About Us</a>
+                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Concerts</a>
+                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Contact</a>
+                <a href="" class="bg-kelvin text-white px-6 py-3 rounded-full font-semibold hover:bg-kelvin-dark transition-colors inline-block text-center mt-4">
+                    Buy Tickets
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-8 border-b border-gray-700">
+                <!-- About -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-kelvin-light">Kelvin Symphony Orchestra</h3>
+                    <p class="text-gray-400 leading-relaxed mb-4">
+                        An entirely student-run orchestra that performs two concerts a year within the university area, providing students with the chance to both learn and perform a wide variety of music in amazing venues.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-kelvin flex items-center justify-center text-kelvin-light hover:text-white transition-all">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-kelvin-light">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Home</a></li>
+                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">About Us</a></li>
+                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Concerts</a></li>
+                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Buy Tickets</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-kelvin-light">Contact</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt text-kelvin mt-1"></i>
+                            <span>University of Glasgow<br>14 University Gardens<br>Glasgow, United Kingdom</span>
+                        </li>
+{#                        <li class="flex items-center gap-3">#}
+{#                            <i class="fas fa-phone text-kelvin"></i>#}
+{#                            <a href="tel:5551234567" class="hover:text-kelvin-light transition-colors">(555) 123-4567</a>#}
+{#                        </li>#}
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-envelope text-kelvin"></i>
+                            <a href="mailto:info@kelvin-ensemble.co.uk" class="hover:text-kelvin-light transition-colors">info@kelvin-ensemble.co.uk</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-kelvin-light">Stay Updated</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to receive updates about our latest performances and news.</p>
+                    <a href="#" class="bg-kelvin text-white px-6 py-2.5 rounded-full font-semibold hover:bg-kelvin-dark transition-colors inline-block">
+                        Subscribe
+                    </a>
+                </div>
+            </div>
+
+            <div class="text-center pt-8 text-gray-400">
+                <p>&copy; {% now "Y" %} Kelvin Symphony Orchestra. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+        const navbarContent = document.getElementById('navbarContent');
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navbarLogo = document.getElementById('navbarLogo');
+
+        // Navbar scroll effect
+        let lastScrollY = 0;
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            if (scrollY > 50) {
+                navbar.classList.add('navbar-gradient');
+                navbarContent.classList.remove('py-6');
+                navbarContent.classList.add('py-3');
+
+                navbarLogo.classList.remove('h-20');
+                navbarLogo.classList.add('h-14');
+            } else {
+                navbar.classList.remove('navbar-gradient');
+                navbarContent.classList.remove('py-3');
+                navbarContent.classList.add('py-6');
+
+                navbarLogo.classList.remove('h-14');
+                navbarLogo.classList.add('h-20');
+            }
+
+            lastScrollY = scrollY;
+        });
+
+        // Mobile menu toggle
+        mobileToggle.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('translate-x-full');
+
+            if (isOpen) {
+                mobileMenu.classList.add('translate-x-full');
+                mobileToggle.querySelector('i').classList.remove('fa-times');
+                mobileToggle.querySelector('i').classList.add('fa-bars');
+            } else {
+                mobileMenu.classList.remove('translate-x-full');
+                mobileToggle.querySelector('i').classList.remove('fa-bars');
+                mobileToggle.querySelector('i').classList.add('fa-times');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+                mobileMenu.classList.add('translate-x-full');
+                mobileToggle.querySelector('i').classList.remove('fa-times');
+                mobileToggle.querySelector('i').classList.add('fa-bars');
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

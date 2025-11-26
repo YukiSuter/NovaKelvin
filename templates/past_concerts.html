@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Past Concerts - Kelvin Symphony Orchestra{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-kelvin to-kelvin-dark"></div>
+    <div class="absolute inset-0 bg-black opacity-40"></div>
+    <div class="relative z-10 text-center text-white px-6 pt-32">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">Past Concerts</h1>
+        <p class="text-xl md:text-2xl text-gray-200">All the concerts we have performed in the past!</p>
+    </div>
+</section>
+
+<!-- Timeline Section -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <p class="text-lg text-gray-600">Explore the incredible performances that have shaped KSO over the years</p>
+        </div>
+
+        <!-- Timeline Container -->
+        <div class="relative">
+            <!-- Vertical Line (hidden on mobile) -->
+            <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-kelvin opacity-30"></div>
+            <!-- Vertical Line (visible on mobile, on the left) -->
+            <div class="md:hidden absolute left-8 top-0 w-1 h-full bg-kelvin opacity-30"></div>
+
+            <!-- Timeline Sections by Year Range -->
+            {% regroup past_concerts by date|date:"Y" as concerts_by_year %}
+            {% for year_group in concerts_by_year %}
+                {% if forloop.first or year_group.grouper|add:"0"|divisibleby:5 %}
+                    {% if not forloop.first %}
+                        <!-- Close previous section -->
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Calculate year range -->
+                    {% with start_year=year_group.grouper|add:"0"|floatformat:0|add:"-"|add:year_group.grouper|add:"0"|floatformat:0|add:"-"|floatformat:0 %}
+                    {% with end_year=year_group.grouper|add:"0"|add:"-4"|floatformat:0 %}
+
+                    <!-- Year Range Header -->
+                    <div class="mb-8">
+                        <button class="year-toggle w-full bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 flex items-center justify-between group"
+                                data-target="year-{{ year_group.grouper|add:'-'|add:end_year }}">
+                            <div class="flex items-center gap-4">
+                                <div class="hidden w-12 h-12 bg-kelvin rounded-full md:flex items-center justify-center">
+                                    <i class="fas fa-calendar-alt text-white text-xl"></i>
+                                </div>
+                                <div class="text-left pl-10 md:pl-0">
+                                    <h2 class="text-2xl font-bold text-gray-900">{{ year_group.grouper }} - {{ end_year }}</h2>
+                                    <p class="text-gray-600 text-sm">Click to expand concerts from this period</p>
+                                </div>
+                            </div>
+                            <div class="transition-transform duration-300 chevron">
+                                <i class="fas fa-chevron-down text-kelvin text-2xl"></i>
+                            </div>
+                        </button>
+
+                        <!-- Collapsible Content -->
+                        <div id="year-{{ year_group.grouper|add:'-'|add:end_year }}" class="year-content hidden mt-6">
+                    {% endwith %}
+                    {% endwith %}
+                {% endif %}
+
+                <!-- Individual Concert Entry -->
+                {% for concert in year_group.list %}
+                <div class="relative mb-12 md:mb-16">
+                    <!-- Desktop Layout: Alternating Left/Right -->
+                    <div class="hidden md:flex {% cycle 'flex-row' 'flex-row-reverse' %} items-center">
+                        <!-- Content Side -->
+                        <div class="w-1/2 {% cycle 'pr-12 text-right' 'pl-12' %}">
+                            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                                {% if concert.image %}
+                                <div class="mb-4 rounded-lg overflow-hidden">
+                                    <img src="{{ concert.image.url }}"
+                                         alt="{{ concert.title }}"
+                                         class="w-full h-48 object-cover">
+                                </div>
+                                {% endif %}
+{#                                <div class="text-kelvin font-semibold mb-2">{{ concert.date|date:"F j, Y" }}</div>#}
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ concert.title }}</h3>
+                                {%  if concert.venue %}
+                                <p class="text-gray-600 mb-3">
+                                    <i class="fas fa-map-marker-alt text-kelvin"></i> {{ concert.venue }}
+                                </p>
+                                {% endif %}
+                                {% if concert.conductor %}
+                                <p class="text-gray-600 mb-3">
+                                    <i class="fas fa-user text-kelvin"></i> Conductor: {{ concert.conductor }}
+                                </p>
+                                {% endif %}
+                                {% if concert.description %}
+                                <p class="text-gray-700 mb-4">{{ concert.description }}</p>
+                                {% endif %}
+                                {% if concert.programme %}
+                                <div class="{% cycle 'text-right' 'text-left' %}">
+                                    <h4 class="font-semibold text-gray-900 mb-2">Programme:</h4>
+                                    <div class="text-gray-700 whitespace-pre-line">{{ concert.programme }}</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Center Circle -->
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-kelvin rounded-full border-4 border-white shadow-lg z-10"></div>
+
+                        <!-- Empty Side -->
+                        <div class="w-1/2"></div>
+                    </div>
+
+                    <!-- Mobile Layout: Timeline on Left, Content on Right -->
+                    <div class="md:hidden flex items-start">
+                        <!-- Timeline Circle -->
+                        <div class="relative flex-shrink-0">
+                            <div class="w-16 h-16 flex items-center justify-center pl-1">
+                                <div class="w-4 h-4 bg-kelvin rounded-full border-4 border-white shadow-lg"></div>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1 ml-4">
+                            <div class="bg-white rounded-lg shadow-lg p-5 hover:shadow-xl transition-shadow duration-300">
+                                {% if concert.image %}
+                                <div class="mb-4 rounded-lg overflow-hidden">
+                                    <img src="{{ concert.image.url }}"
+                                         alt="{{ concert.title }}"
+                                         class="w-full h-40 object-cover">
+                                </div>
+                                {% endif %}
+{#                                <div class="text-kelvin font-semibold text-sm mb-2">{{ concert.date|date:"F j, Y" }}</div>#}
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ concert.title }}</h3>
+                                {%  if concert.venue %}
+                                <p class="text-gray-600 text-sm mb-2">
+                                    <i class="fas fa-map-marker-alt text-kelvin"></i> {{ concert.venue }}
+                                </p>
+                                {% endif %}
+                                {% if concert.conductor %}
+                                <p class="text-gray-600 text-sm mb-3">
+                                    <i class="fas fa-user text-kelvin"></i> Conductor: {{ concert.conductor }}
+                                </p>
+                                {% endif %}
+                                {% if concert.description %}
+                                <p class="text-gray-700 text-sm mb-3">{{ concert.description }}</p>
+                                {% endif %}
+                                {% if concert.programme %}
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 text-sm mb-2">Programme:</h4>
+                                    <div class="text-gray-700 text-sm whitespace-pre-line">{{ concert.programme }}</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endfor %}
+
+            <!-- Close last section -->
+            {% if concerts_by_year %}
+                        </div>
+                    </div>
+            {% else %}
+            <!-- Placeholder if no concerts exist -->
+            <div class="text-center py-12">
+                <i class="fas fa-music text-6xl text-gray-300 mb-4"></i>
+                <p class="text-xl text-gray-500">No past concerts to display yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section (Optional) -->
+{% if past_concerts %}
+<section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+            <div class="p-6">
+                <div class="text-5xl font-bold text-kelvin mb-2">{{ past_concerts|length }}</div>
+                <div class="text-gray-600 text-lg">Concerts Performed</div>
+            </div>
+            <div class="p-6">
+                <div class="text-5xl font-bold text-kelvin mb-2">{{ past_concerts.0.date|date:"Y"|add:"-2000" }}+</div>
+                <div class="text-gray-600 text-lg">Years of Music</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<script>
+    // Toggle year sections
+    document.querySelectorAll('.year-toggle').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const content = document.getElementById(targetId);
+            const chevron = this.querySelector('.chevron');
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+    });
+
+    // Optional: Open the most recent section by default
+    const firstToggle = document.querySelector('.year-toggle');
+    if (firstToggle) {
+        firstToggle.click();
+    }
+</script>
+
+{% endblock %}

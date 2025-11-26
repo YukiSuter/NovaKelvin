@@ -24,6 +24,21 @@
         .navbar-gradient {
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
         }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .dropdown-menu {
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -0.5rem;
+            left: 0;
+            right: 0;
+            height: 0.5rem;
+        }
     </style>
 </head>
 <body class="font-sans">
@@ -32,26 +47,31 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div id="navbarContent" class="flex justify-between items-center transition-all duration-300 py-6">
                 <!-- Logo -->
-                <a href="" class="flex items-center gap-3 text-white hover:opacity-80 transition-opacity">
+                <a href="{% url 'home' %}" class="flex items-center gap-3 text-white hover:opacity-80 transition-opacity">
                     <img src="{% static 'img/header/logo.png' %}"
                          alt="Kelvin Symphony Orchestra"
                          id="navbarLogo"
                          class="h-24 w-auto">
                 </a>
-{#                <a href="" class="flex items-center gap-3 text-white hover:opacity-80 transition-opacity">#}
-{#                    <div class="w-12 h-12 bg-kelvin rounded-full flex items-center justify-center text-xl font-bold">#}
-{#                        K#}
-{#                    </div>#}
-{#                    <div>#}
-{#                        <h1 class="text-xl font-semibold">Kelvin Symphony</h1>#}
-{#                        <p class="text-sm text-gray-300">Orchestra</p>#}
-{#                    </div>#}
-{#                </a>#}
 
                 <!-- Desktop Menu -->
                 <ul class="hidden lg:flex items-center gap-8">
-                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Home</a></li>
-                    <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">About Us</a></li>
+                    <li><a href="{% url 'home' %}" class="text-white hover:text-kelvin-light transition-colors font-medium">Home</a></li>
+
+                    <!-- About Us Dropdown -->
+                    <li class="dropdown relative">
+                        <button class="text-white hover:text-kelvin-light transition-colors font-medium flex items-center gap-1 py-2">
+                            About Us
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div class="dropdown-menu hidden absolute top-full left-0 w-48 bg-gray-900 rounded-lg shadow-xl py-2">
+                            <a href="{% url 'about' %}" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">Who are we?</a>
+                            <a href="{% url 'committee' %}" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">The Committee</a>
+                            <a href="{% url 'pastconcerts' %}" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">Past Concerts</a>
+                            <a href="" class="block px-4 py-2 text-white hover:bg-kelvin hover:text-white transition-colors">Join Us</a>
+                        </div>
+                    </li>
+
                     <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Concerts</a></li>
                     <li><a href="" class="text-white hover:text-kelvin-light transition-colors font-medium">Contact</a></li>
                     <li>
@@ -62,17 +82,31 @@
                 </ul>
 
                 <!-- Mobile Toggle -->
-                <button id="mobileToggle" class="lg:hidden text-white text-2xl">
+                <button id="mobileToggle" class="lg:hidden text-white text-2xl relative z-50">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="lg:hidden fixed top-0 right-0 h-screen w-80 bg-gray-900 transform translate-x-full transition-transform duration-300 shadow-2xl">
+        <div id="mobileMenu" class="lg:hidden fixed top-0 right-0 h-screen w-80 bg-gray-900 transform translate-x-full transition-transform duration-300 shadow-2xl overflow-y-auto z-40">
             <div class="flex flex-col p-8 pt-20 gap-6">
                 <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Home</a>
-                <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">About Us</a>
+
+                <!-- Mobile About Us Dropdown -->
+                <div>
+                    <button id="mobileAboutToggle" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium w-full text-left flex items-center justify-between">
+                        About Us
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-300"></i>
+                    </button>
+                    <div id="mobileAboutMenu" class="hidden pl-4 mt-3 space-y-3">
+                        <a href="" class="block text-gray-300 hover:text-kelvin-light transition-colors">Our History</a>
+                        <a href="" class="block text-gray-300 hover:text-kelvin-light transition-colors">Our Team</a>
+                        <a href="" class="block text-gray-300 hover:text-kelvin-light transition-colors">Our Music</a>
+                        <a href="" class="block text-gray-300 hover:text-kelvin-light transition-colors">Join Us</a>
+                    </div>
+                </div>
+
                 <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Concerts</a>
                 <a href="" class="text-white hover:text-kelvin-light transition-colors text-lg font-medium">Contact</a>
                 <a href="" class="bg-kelvin text-white px-6 py-3 rounded-full font-semibold hover:bg-kelvin-dark transition-colors inline-block text-center mt-4">
@@ -117,8 +151,8 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4 text-kelvin-light">Quick Links</h4>
                     <ul class="space-y-2">
-                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Home</a></li>
-                        <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">About Us</a></li>
+                        <li><a href="{% url 'home' %}" class="text-gray-400 hover:text-kelvin-light transition-colors">Home</a></li>
+                        <li><a href="{% url 'about' %}" class="text-gray-400 hover:text-kelvin-light transition-colors">About Us</a></li>
                         <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Concerts</a></li>
                         <li><a href="" class="text-gray-400 hover:text-kelvin-light transition-colors">Buy Tickets</a></li>
                     </ul>
@@ -132,10 +166,6 @@
                             <i class="fas fa-map-marker-alt text-kelvin mt-1"></i>
                             <span>University of Glasgow<br>14 University Gardens<br>Glasgow, United Kingdom</span>
                         </li>
-{#                        <li class="flex items-center gap-3">#}
-{#                            <i class="fas fa-phone text-kelvin"></i>#}
-{#                            <a href="tel:5551234567" class="hover:text-kelvin-light transition-colors">(555) 123-4567</a>#}
-{#                        </li>#}
                         <li class="flex items-center gap-3">
                             <i class="fas fa-envelope text-kelvin"></i>
                             <a href="mailto:info@kelvin-ensemble.co.uk" class="hover:text-kelvin-light transition-colors">info@kelvin-ensemble.co.uk</a>
@@ -165,6 +195,8 @@
         const mobileToggle = document.getElementById('mobileToggle');
         const mobileMenu = document.getElementById('mobileMenu');
         const navbarLogo = document.getElementById('navbarLogo');
+        const mobileAboutToggle = document.getElementById('mobileAboutToggle');
+        const mobileAboutMenu = document.getElementById('mobileAboutMenu');
 
         // Navbar scroll effect
         let lastScrollY = 0;
@@ -202,6 +234,20 @@
                 mobileMenu.classList.remove('translate-x-full');
                 mobileToggle.querySelector('i').classList.remove('fa-bars');
                 mobileToggle.querySelector('i').classList.add('fa-times');
+            }
+        });
+
+        // Mobile About Us dropdown toggle
+        mobileAboutToggle.addEventListener('click', () => {
+            const isOpen = !mobileAboutMenu.classList.contains('hidden');
+            const icon = mobileAboutToggle.querySelector('i');
+
+            if (isOpen) {
+                mobileAboutMenu.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                mobileAboutMenu.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
             }
         });
 

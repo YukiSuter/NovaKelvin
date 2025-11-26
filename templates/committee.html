@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}The Committee - Kelvin Symphony Orchestra{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-kelvin to-kelvin-dark"></div>
+    <div class="absolute inset-0 bg-black opacity-40"></div>
+    <div class="relative z-10 text-center text-white px-6 pt-32">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">The Committee</h1>
+        <p class="text-xl md:text-2xl text-gray-200">Leading the Kelvin Symphony Orchestra</p>
+    </div>
+</section>
+
+<!-- What We Do Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-900 mb-6">What We Do</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                The Kelvin Symphony Orchestra is entirely student-run, and our committee is the driving force behind everything we do. From organizing rehearsals and concerts to managing finances and promoting our events, the committee ensures that KSO continues to thrive as one of Glasgow's premier student orchestras.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed">
+                Our committee members are passionate musicians and dedicated volunteers who work tirelessly to create opportunities for students to perform, learn, and enjoy orchestral music together. Each role is vital to our success, and we're proud of the collaborative spirit that makes KSO special.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Meet the Committee Section -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">Meet the Committee</h2>
+            <p class="text-lg text-gray-600">Get to know the team behind KSO 2025/26</p>
+        </div>
+
+        <!-- Committee Members Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {% for member in committee_members %}
+            <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="aspect-square bg-gray-200 overflow-hidden">
+                    {% if member.image %}
+                        <img src="{{ member.image.url }}"
+                             alt="{{ member.name }}"
+                             class="w-full h-full object-cover">
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-kelvin to-kelvin-dark">
+                            <i class="fas fa-user text-white text-6xl"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ member.name }}</h3>
+                    <p class="text-kelvin font-medium mb-3">{{ member.role }}</p>
+                    <a href="mailto:{{ member.email }}"
+                       class="flex items-center gap-2 text-gray-600 hover:text-kelvin transition-colors">
+                        <i class="fas fa-envelope"></i>
+                        <span class="text-sm">{{ member.email }}</span>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Join the Committee CTA -->
+<section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Interested in Joining the Committee?</h2>
+        <p class="text-lg text-gray-700 mb-8">
+            Committee positions open up at the end of each academic year. If you're passionate about music and want to help shape the future of KSO, please attend our end of year AGM where we elect the new committee.
+        </p>
+    </div>
+</section>
+
+{% endblock %}

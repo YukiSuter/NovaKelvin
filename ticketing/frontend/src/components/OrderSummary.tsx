@@ -57,10 +57,6 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
             <span className="text-gray-600">Subtotal</span>
             <span className="font-semibold">£{calculateTotal().toFixed(2)}</span>
           </div>
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-gray-600">Service Fee</span>
-            <span className="font-semibold">£{(calculateTotal() * 0.1).toFixed(2)}</span>
-          </div>
           <div className="flex justify-between items-center text-lg font-bold pt-2 border-t">
             <span>Total</span>
             <span className="text-[#008888]">£{(calculateTotal() * 1.1).toFixed(2)}</span>

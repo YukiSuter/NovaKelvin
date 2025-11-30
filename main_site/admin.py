@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.html import format_html_join
 
 from main_site.models import CommitteeMember, PastConcert
-from ticketing.models import Concert, TicketType, Ticket
+from ticketing.models import Concert, TicketType, Ticket, Order
 
 # from import_export.admin import ExportMixin
 # from import_export.admin import ImportExportModelAdmin
@@ -96,3 +96,4 @@ class ticketAdmin(admin.ModelAdmin):
 
 admin.site.register(CommitteeMember)
 admin.site.register(PastConcert)
+admin.site.register(Order)

@@ -5,7 +5,7 @@ import { api } from './services/api';
 import { ProgressSteps } from './components/ProgressSteps';
 import { ConcertSelection } from './components/ConcertSelection';
 import { TicketSelection } from './components/TicketSelection';
-import { CheckoutForm } from './components/CheckoutForm';
+import { StripeCheckout } from './components/StripeCheckout';
 import { OrderSummary } from './components/OrderSummary';
 
 export default function TicketsPage() {
@@ -14,17 +14,12 @@ export default function TicketsPage() {
   const [selectedConcertId, setSelectedConcertId] = useState<number | null>(null);
   const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
   const [ticketQuantities, setTicketQuantities] = useState<TicketQuantities>({});
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [loadingConcerts, setLoadingConcerts] = useState(true);
   const [loadingTickets, setLoadingTickets] = useState(false);
   const [validating, setValidating] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [creatingCheckout, setCreatingCheckout] = useState(false);
 
   // Fetch concerts on mount
   useEffect(() => {
@@ -76,7 +71,7 @@ export default function TicketsPage() {
       for (const ticketType of freshTicketTypes) {
         const requestedQty = ticketQuantities[ticketType.id] || 0;
         if (requestedQty > ticketType.qty_available) {
-          alert(`Sorry, only ${ticketType.qty_available} ${ticketType.name} tickets are now available. Please adjust your selection.`);
+          alert(`Sorry, only ${ticketType.qty_available} ${ticketType.ticket_label} tickets are now available. Please adjust your selection.`);
 
           // Update ticket types with fresh data
           setTicketTypes(freshTicketTypes);
@@ -126,62 +121,44 @@ export default function TicketsPage() {
 
   const handleContinueToCheckout = async () => {
     const isValid = await validateAvailability();
-    if (isValid) {
+    if (!isValid) return;
+
+    setCreatingCheckout(true);
+    try {
+      // Create checkout session
+      const lineItems = Object.entries(ticketQuantities)
+        .filter(([_, qty]) => qty > 0)
+        .map(([ticketTypeId, quantity]) => ({
+          ticket_type_id: parseInt(ticketTypeId),
+          quantity
+        }));
+
+      const session = await api.createCheckoutSession(selectedConcertId!, lineItems);
+      setClientSecret(session.client_secret);
+      setSessionId(session.session_id);
       setStep(3);
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      alert('Failed to create checkout session. Please try again.');
+    } finally {
+      setCreatingCheckout(false);
     }
   };
 
-  const handleSubmit = () => {
-    if (!selectedConcertId) {
-      alert("Please select a concert.");
-      return;
-    }
-
-    const totalTickets = Object.values(ticketQuantities).reduce((sum, qty) => sum + qty, 0);
-    if (totalTickets === 0) {
-      alert("Please select at least one ticket.");
-      return;
-    }
-
-    if (!formData.firstName || !formData.lastName || !formData.email) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
-    setSubmitting(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitting(false);
-      setShowSuccess(true);
-
-      // Reset after showing success
-      setTimeout(() => {
-        setShowSuccess(false);
-        setStep(1);
-        setSelectedConcertId(null);
-        setTicketTypes([]);
-        setTicketQuantities({});
-        setFormData({ firstName: "", lastName: "", email: "", phone: "" });
-      }, 3000);
-    }, 1500);
+  const handlePaymentComplete = () => {
+    // Reset and go back to step 1
+    setStep(1);
+    setSelectedConcertId(null);
+    setTicketTypes([]);
+    setTicketQuantities({});
+    setClientSecret(null);
+    setSessionId(null);
   };
 
   const selectedConcert = concerts.find(c => c.id === selectedConcertId) || null;
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Success Message */}
-      {showSuccess && (
-        <div className="mb-8 bg-green-50 border-2 border-green-500 rounded-lg p-6 text-center">
-          <div className="flex items-center justify-center mb-2">
-            <Check className="w-8 h-8 text-green-500 mr-2" />
-            <h3 className="text-2xl font-bold text-green-800">Order Confirmed!</h3>
-          </div>
-          <p className="text-green-700">Your tickets have been reserved. Confirmation sent to {formData.email}</p>
-        </div>
-      )}
-
       {/* Progress Steps */}
       <ProgressSteps currentStep={step} />
 
@@ -206,17 +183,21 @@ export default function TicketsPage() {
               onBack={() => setStep(1)}
               onContinue={handleContinueToCheckout}
               loading={loadingTickets}
-              validating={validating}
+              validating={validating || creatingCheckout}
             />
           )}
 
-          {step === 3 && (
-            <CheckoutForm
-              formData={formData}
-              onFormChange={setFormData}
-              onBack={() => setStep(2)}
-              onSubmit={handleSubmit}
-              submitting={submitting}
+          {step === 3 && clientSecret && sessionId && (
+            <StripeCheckout
+              clientSecret={clientSecret}
+              sessionId={sessionId}
+              onBack={() => {
+                setStep(2);
+                setClientSecret(null);
+                setSessionId(null);
+              }}
+              onComplete={handlePaymentComplete}
+              concertName={selectedConcert?.concert_name || ''}
             />
           )}
         </div>

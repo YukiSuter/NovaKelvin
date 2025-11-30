@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tickets - Kelvin Symphony Orchestra{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative h-96 flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-kelvin to-kelvin-dark"></div>
+    <div class="absolute inset-0 bg-black opacity-40"></div>
+    <div class="relative z-10 text-center text-white px-6 pt-32">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">Buy Tickets</h1>
+        <p class="text-xl md:text-2xl text-gray-200">Tickets for our concerts can be bought below!</p>
+    </div>
+</section>
+
+<section class="py-16 bg-gray-50">
+
+    <div class="max-w-6xl mx-auto">
+        <div class="mb-8 bg-green-50 border-2 border-green-500 rounded-lg p-6 text-center">
+          <div class="flex items-center justify-center mb-2">
+            <h3 class="text-2xl font-bold text-green-800">Payment Successful!</h3>
+          </div>
+          <p class="text-green-700">Your tickets have been confirmed. Check your email for details.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

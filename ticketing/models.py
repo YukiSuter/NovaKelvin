@@ -32,6 +32,7 @@ class TicketType(models.Model):
                   "(i.e. 'Standard Seating' or 'Concession Seating' or 'Restricted View')",
     )
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    price_id = models.CharField(max_length=100, null=True, blank=True, help_text="The price_id generated when creating the price point in stripe.")
     description = models.CharField(max_length=100, null=True, blank=True, help_text="Description of the ticket type.")
     for_concert = models.ForeignKey(
         Concert,
@@ -168,3 +169,50 @@ def update_tickettype_quantities_on_delete(sender, instance, **kwargs):
     """
     if instance.ticket_type_id:
         TicketType.recalculate_quantities_for_cluster(instance.ticket_type)
+
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('failed', 'Failed'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    stripe_session_id = models.CharField(max_length=255, unique=True, db_index=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+
+    customer_email = models.EmailField()
+    customer_name = models.CharField(max_length=255, blank=True)
+
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, default='GBP')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Order {self.id} - {self.stripe_session_id[:20]} - {self.status}"
+
+
+# class OrderItem(models.Model):
+#     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+#     ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField()
+#     price_per_ticket = models.DecimalField(max_digits=10, decimal_places=2)
+#
+#     created_at = models.DateTimeField(auto_now_add=True)
+#
+#     class Meta:
+#         ordering = ['id']
+#
+#     def __str__(self):
+#         return f"{self.quantity}x {self.ticket_type.ticket_label}"
+#
+#     @property
+#     def subtotal(self):
+#         return self.quantity * self.price_per_ticket

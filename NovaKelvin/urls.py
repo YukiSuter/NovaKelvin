@@ -29,6 +29,7 @@ urlpatterns = [
     path('about/past_concerts', ms_views.pastconcerts, name='pastconcerts'),
 
     path("tickets/", ts_views.ticketing_page, name="ticketing_home"),
+    path("tickets/success", ts_views.ticketing_success, name="ticketing_success"),
 
     path('api/', include('api.urls')),  # Add this line
 

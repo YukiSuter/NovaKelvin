@@ -143,6 +143,15 @@ REST_FRAMEWORK = {
     ],
 }
 
+STRIPE_SECRET_KEY = 'sk_test_51SZ0XBBzBUhSO3HmggAfeq9QUm0MHLmfnUsQP0H75oCnWfoym3IRvHgR7aV2MVT1Xo5aaYuRASCCkuI2ksyqsTOt0098VRSCQ2'  # Replace with your actual secret key
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51SZ0XBBzBUhSO3HmkTTICWKMvWlOI7QYw5wrG83bh5eCdSUuPBPtfSeC430Q2YAJFU7s5ntRcVclaa0KdJhufEtR00eCr16f5I'  # Replace with your actual publishable key
+STRIPE_WEBHOOK_SECRET = 'whsec_479cc753ae59ad1b171441dd0428a9375e00c9322f930bc0d2022bedff8f736e'  # Replace with your webhook signing secret
+
+# Return URL for Stripe checkout (adjust to your frontend URL)
+STRIPE_RETURN_URL = 'http://localhost:8123/tickets/success'  # For development
+# STRIPE_RETURN_URL = 'https://yourdomain.com/checkout/return'  # For production
+
+
 if DEBUG:
     # Add django_browser_reload only in DEBUG mode
     INSTALLED_APPS += ["django_browser_reload"]

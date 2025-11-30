@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main_site.apps.MainSiteConfig',
     "tailwind",
-    "theme"
+    "theme",
+    "ticketing",
+    'rest_framework',  # Add Django Rest Framework
+    'api',  # Add your app
 ]
 
 TAILWIND_APP_NAME = "theme"
@@ -132,6 +135,13 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+}
 
 if DEBUG:
     # Add django_browser_reload only in DEBUG mode

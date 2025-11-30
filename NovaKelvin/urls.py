@@ -18,14 +18,20 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 
-from main_site import views
+from main_site import views as ms_views
+from ticketing import views as ts_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('about', views.about, name='about'),
-    path('about/committee', views.committee, name='committee'),
-    path('about/past_concerts', views.pastconcerts, name='pastconcerts'),
+    path('', ms_views.home, name='home'),
+    path('about', ms_views.about, name='about'),
+    path('about/committee', ms_views.committee, name='committee'),
+    path('about/past_concerts', ms_views.pastconcerts, name='pastconcerts'),
+
+    path("tickets/", ts_views.ticketing_page, name="ticketing_home"),
+
+    path('api/', include('api.urls')),  # Add this line
+
 ]
 
 if settings.DEBUG:
